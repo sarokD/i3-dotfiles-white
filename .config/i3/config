@@ -1,0 +1,174 @@
+# i3 config file (v4)
+# Reference: https://i3wm.org/docs/userguide.html
+
+#──────────────────────────────────────────────
+# General
+#──────────────────────────────────────────────
+set $mod Mod4
+
+font pango:JetBrains Mono 10
+
+floating_modifier $mod
+tiling_drag modifier titlebar
+
+#──────────────────────────────────────────────
+# Autostart
+#──────────────────────────────────────────────
+# XDG autostart .desktop files
+exec --no-startup-id dex --autostart --environment i3
+
+# Keyboard layout (Belgian)
+exec --no-startup-id setxkbmap be
+
+# Lock screen before suspend
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+# Tray applets
+exec --no-startup-id blueman-applet
+
+# Compositor
+exec --no-startup-id picom
+
+# Wallpaper + default cursor
+exec_always --no-startup-id feh --bg-scale ~/Pictures/wallpapers/mountain-white.jpg
+exec_always --no-startup-id xsetroot -cursor_name left_ptr
+
+# Full brightness on login
+exec --no-startup-id brightnessctl set 100%
+
+# Notification daemon
+exec --no-startup-id dunst
+
+# Menu bar
+exec_always --no-startup-id pkill polybar; polybar &
+
+#──────────────────────────────────────────────
+# Appearance
+#──────────────────────────────────────────────
+default_border pixel 3
+default_floating_border pixel 3
+gaps inner 5
+
+# class          border   backgr   text     indicator
+client.focused   #eeeeee  #eeeeee  #eeeeee  #eeeeee
+client.unfocused #797979  #797979  #797979  #797979
+
+#──────────────────────────────────────────────
+# Apps
+#──────────────────────────────────────────────
+bindsym $mod+Return exec kitty
+bindsym $mod+d exec --no-startup-id rofi -show drun
+bindsym $mod+Shift+f exec firefox
+
+#──────────────────────────────────────────────
+# Media keys
+#──────────────────────────────────────────────
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute     exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+bindsym XF86MonBrightnessUp   exec --no-startup-id brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
+
+#──────────────────────────────────────────────
+# Windows
+#──────────────────────────────────────────────
+bindsym $mod+Shift+a kill
+
+# Focus (jklm = left/down/up/right)
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+m focus right
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
+bindsym $mod+Right focus right
+
+# Move
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+m move right
+bindsym $mod+Shift+Left  move left
+bindsym $mod+Shift+Down  move down
+bindsym $mod+Shift+Up    move up
+bindsym $mod+Shift+Right move right
+
+# Split
+bindsym $mod+h split h
+bindsym $mod+v split v
+
+# Fullscreen / layout / floating
+bindsym $mod+f fullscreen toggle
+bindsym $mod+s layout stacking
+bindsym $mod+z layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+bindsym $mod+q focus parent
+
+#──────────────────────────────────────────────
+# Workspaces (AZERTY number row)
+#──────────────────────────────────────────────
+set $ws1  "1"
+set $ws2  "2"
+set $ws3  "3"
+set $ws4  "4"
+set $ws5  "5"
+set $ws6  "6"
+set $ws7  "7"
+set $ws8  "8"
+set $ws9  "9"
+set $ws10 "10"
+
+bindsym $mod+ampersand   workspace number $ws1
+bindsym $mod+eacute      workspace number $ws2
+bindsym $mod+quotedbl    workspace number $ws3
+bindsym $mod+apostrophe  workspace number $ws4
+bindsym $mod+parenleft   workspace number $ws5
+bindsym $mod+section     workspace number $ws6
+bindsym $mod+egrave      workspace number $ws7
+bindsym $mod+exclam      workspace number $ws8
+bindsym $mod+ccedilla    workspace number $ws9
+bindsym $mod+agrave      workspace number $ws10
+
+bindsym $mod+Shift+ampersand   move container to workspace number $ws1
+bindsym $mod+Shift+eacute      move container to workspace number $ws2
+bindsym $mod+Shift+quotedbl    move container to workspace number $ws3
+bindsym $mod+Shift+apostrophe  move container to workspace number $ws4
+bindsym $mod+Shift+parenleft   move container to workspace number $ws5
+bindsym $mod+Shift+section     move container to workspace number $ws6
+bindsym $mod+Shift+egrave      move container to workspace number $ws7
+bindsym $mod+Shift+exclam      move container to workspace number $ws8
+bindsym $mod+Shift+ccedilla    move container to workspace number $ws9
+bindsym $mod+Shift+agrave      move container to workspace number $ws10
+
+#──────────────────────────────────────────────
+# Session
+#──────────────────────────────────────────────
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+#──────────────────────────────────────────────
+# Resize mode
+#──────────────────────────────────────────────
+mode "resize" {
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym m resize grow width 10 px or 10 ppt
+
+        bindsym Left  resize shrink width 10 px or 10 ppt
+        bindsym Down  resize grow height 10 px or 10 ppt
+        bindsym Up    resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
